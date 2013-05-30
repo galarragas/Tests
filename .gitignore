@@ -1,0 +1,16 @@
+*.class
+
+# Package Files #
+*.jar
+*.war
+*.ear
+
+#OS junk files
+[Tt]humbs.db
+*.DS_Store
+
+# Build files #
+**/target/**
+**/.idea
+*.iml
+
