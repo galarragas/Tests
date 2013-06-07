@@ -1,36 +1,12 @@
 package main
 
 import (
-    "strconv"
+	"strconv"
 	"bufio"
 	"encoding/csv"
 	"os"
 	"sort"
 )
-
-func printPoint(point *Point) string {
-	return "(" + strconv.Itoa(point.x) + ", " + strconv.Itoa(point.y) + ")"	
-}
-
-func printInterval(interval *Interval ) string{
-	return "[" +  printPoint(interval.left) + "," + printPoint(interval.right) + "]"
-}
-
-func printStatus(status *Status) string {
-	return "Status[ optimum=" + printInterval(status.optimum) + ", min=" + printPoint(status.graphMin) + "]"
-}
-
-func equalPoint(expected *Point, actual *Point) bool {
-	return (expected.x == actual.x) && (expected.y == actual.y)
-}
-
-func equalInterval(expected *Interval, actual *Interval) bool {
-	return equalPoint(expected.left, actual.left) && equalPoint(expected.right, actual.right)
-}
-
-func equalStatus(expected *Status, actual *Status) bool {
-	return equalPoint(expected.graphMin, actual.graphMin) && equalInterval(expected.optimum, actual.optimum)
-}
 
 // By is the type of a "less" function that defines the ordering of its Planet arguments.
 type By func(p1, p2 *Point) bool

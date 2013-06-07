@@ -11,5 +11,5 @@ func main() {
 	
 	maxInterval := max(stockPriceGraph)
 	
-	fmt.Printf("Max is %s with a profit of %d\n", printInterval(maxInterval), profit(maxInterval))
+	fmt.Printf("Max is %s with a profit of %d\n", maxInterval.print(), profit(maxInterval))
 }

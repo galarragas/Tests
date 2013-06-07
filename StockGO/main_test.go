@@ -20,43 +20,43 @@ var fullList = []Point{point1, point2, point3, point4, point5, point6, point7, p
 		
 
 func TestMin(t *testing.T) { 
- 	assertEqualPoint(t, &point1, min(&point1, &point1))
+ 	assertEqual(t, point1, *min(&point1, &point1))
 }
 
 func TestMostProfitable(t *testing.T) {
-    assertEqualInterval(t, &interval2, mostProfitable(&interval1, &interval2)) 
+    assertEqual(t, interval2, *mostProfitable(&interval1, &interval2)) 
 }
 
 func TestCurrMaxNoStatus(t *testing.T) {
-    assertEqualStatus(t, &Status { &Interval {&point1, &point1}, &point1 }, currMax(nil, &point1) )
+    assertEqual(t, Status { &Interval {&point1, &point1}, &point1 }, *currMax(nil, &point1) )
 }
 
 func TestCurrMaxFirstPoint(t *testing.T) {
-    assertEqualStatus(t, &Status { &Interval {&point1, &point1}, &point1 }, currMax(nil, &point1) )
+    assertEqual(t, Status { &Interval {&point1, &point1}, &point1 }, *currMax(nil, &point1) )
 }
 
 func TestCurrMaxIncreasingChangesMaxInOptimum(t *testing.T) {
-    assertEqualStatus(t, &Status { &Interval {&point1, &point2}, &point1 }, currMax(&Status { &Interval {&point1, &point1}, &point1 }, &point2) )
+    assertEqual(t, Status { &Interval {&point1, &point2}, &point1 }, *currMax(&Status { &Interval {&point1, &point1}, &point1 }, &point2) )
 }
 
 func TestCurrMaxDecreasingChangesMin(t *testing.T) {
-    assertEqualStatus(t, &Status { &Interval {&point1, &point2}, &point4 }, currMax(&Status { &Interval {&point1, &point2}, &point1 }, &point4) )
+    assertEqual(t, Status { &Interval {&point1, &point2}, &point4 }, *currMax(&Status { &Interval {&point1, &point2}, &point1 }, &point4) )
 }
 
 func TestMaxOnEmptyListIsNil(t *testing.T) {
 	maxVal := max(emptyList)
 	if maxVal != nil {
-		t.Errorf("Expecting nil result but got %s", printInterval(maxVal))	
+		t.Errorf("Expecting nil result but got %s", maxVal.print())	
 	}
 }
 
 func TestMaxOnGrowingListReturnsExtremes(t *testing.T) {
-	assertEqualInterval( t, &Interval {&point1, &point3}, max(growingList) )
+	assertEqual( t, Interval {&point1, &point3}, *max(growingList) )
 	
 }
 
 func TestMaxWorksWithComplexList(t *testing.T) {
-	assertEqualInterval( t, &Interval {&point4, &point7}, max(fullList) )
+	assertEqual( t, Interval {&point4, &point7}, *max(fullList) )
 	
 }
 
@@ -68,24 +68,18 @@ func TestReadPointsFromCSV(t *testing.T) {
 	}
 	
 	for i := 0; i < len(points); i++ {
-		assertEqualPoint(t, &fullList[i], &points[i])
+		assertEqual(t, fullList[i], points[i])
 	} 
 }
 
-func assertEqualPoint(t *testing.T, expected *Point, actual *Point) {
-	if !equalPoint(expected, actual) {
-		t.Errorf("Points are not equal, expected %s but found %s", printPoint(expected), printPoint(actual))
+type Assertable interface {
+	equal(that Comparable) bool	
+	print() string
+}
+
+func assertEqual(t *testing.T, expected Assertable, actual Assertable) {
+	if !expected.equal(actual) {
+		t.Errorf("Objects are not equal, expected %s but found %s", expected.print(), actual.print())
 	}
 }
 
-func assertEqualInterval(t *testing.T, expected *Interval, actual *Interval) {
-	if !equalInterval(expected, actual) {
-		t.Errorf("Intervals are not equal, expected %s but found %s", printInterval(expected), printInterval(actual))
-	}
-}
-
-func assertEqualStatus(t *testing.T, expected *Status, actual *Status) {
-	if !equalStatus(expected, actual) {
-		t.Errorf("Statuses are not equal, expected %s but found %s", printStatus(expected), printStatus(actual))
-	}
-}
