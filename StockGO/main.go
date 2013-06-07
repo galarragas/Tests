@@ -6,7 +6,7 @@ import (
 	)
 	
 func main() {
-	fmt.Println("Reading from %s", os.Args[1])
+	fmt.Printf("Reading from %s\n", os.Args[1])
 	stockPriceGraph := readPointsFromCSV(os.Args[1])
 	
 	maxInterval := max(stockPriceGraph)
