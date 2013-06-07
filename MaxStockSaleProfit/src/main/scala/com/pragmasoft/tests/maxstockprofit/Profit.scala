@@ -1,38 +1,32 @@
 package com.pragmasoft.tests.maxstockprofit
 
-case class ProfitGraphPoint(val x: Double, val y: Double)
-case class ProfitGraphInterval(val left: ProfitGraphPoint, val right: ProfitGraphPoint)
-case class MaxFinderStatus(val optimum: ProfitGraphInterval, val graphMin: ProfitGraphPoint)
+case class Point(val x: Double, val y: Double)
 
-object ProfitGraphPoint {
-}
+case class Interval(val left: Point, val right: Point)
 
-object ProfitGraphInterval {
-}
-
-object MaxFinderStatus {
-}
+case class Status(val optimum: Interval, val graphMin: Point)
 
 object MaxStockProfit {
 
-  def profit(interval: ProfitGraphInterval): Double = interval.right.y - interval.left.y
+  def profit(interval: Interval): Double = interval.right.y - interval.left.y
 
-  def min(a: ProfitGraphPoint, b: ProfitGraphPoint) = if(a.y <= b.y) a else b
+  def min(a: Point, b: Point) = if (a.y <= b.y) a else b
 
-  def currMax(status: Option[MaxFinderStatus], currPoint: ProfitGraphPoint): Option[MaxFinderStatus] = status match {
-    case None => Some(MaxFinderStatus(ProfitGraphInterval(currPoint, currPoint), currPoint))
-    case Some(finderStatus) => {
-      val potentialMaxInterval: ProfitGraphInterval = ProfitGraphInterval(finderStatus.graphMin, currPoint)
+  def moreProfitable(a: Interval, b: Status): Interval = if (profit(a) > profit(b.optimum)) a else b.optimum
+
+  def currMax(status: Option[Status], currPoint: Point): Option[Status] = status match {
+    case None => Some(Status(Interval(currPoint, currPoint), currPoint))
+    case Some(finderStatus) =>
       Some(
-        MaxFinderStatus(
-          if (profit(potentialMaxInterval) > profit(finderStatus.optimum)) potentialMaxInterval else finderStatus.optimum,
+        Status(
+          moreProfitable(Interval(finderStatus.graphMin, currPoint), finderStatus),
           min(currPoint, finderStatus.graphMin)
         )
       )
-    }
   }
 
-  def maxProfitPoint(graph: List[ProfitGraphPoint]): Option[ProfitGraphInterval] =
-    graph.foldLeft[Option[MaxFinderStatus]](None)(currMax(_,_)).flatMap(a => Some(a.optimum))
+
+  def maxProfitPoint(graph: List[Point]): Option[Interval] =
+    graph.foldLeft[Option[Status]](None)(currMax(_, _)).flatMap(a => Some(a.optimum))
 
 }
