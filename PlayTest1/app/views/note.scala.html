@@ -1,0 +1,24 @@
+@(note: Note)
+
+@import helper._
+
+@main("Note") {
+
+<div class="hero-unit">
+<h1>@note.title</h1>
+
+<div class="well well-large">
+    @note.body
+</div>
+
+
+@form(routes.Application.deleteNote(note.id)) {
+<input type="submit" value="Delete" class="btn">
+}
+
+@form(routes.Application.listNotes) {
+    <input type="submit" value="Full list" class="btn">
+}
+
+</div>
+}

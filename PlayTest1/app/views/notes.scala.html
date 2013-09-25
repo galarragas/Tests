@@ -1,0 +1,49 @@
+@(notes: List[Note], noteForm: Form[Note], searchForm: Form[String])
+
+@import helper._
+@import helper.twitterBootstrap._
+
+@main("Notes list") {
+
+<div class="container">
+    <b>Find by title</b>
+
+    @form(routes.Application.findNoteByPartialTitle) {
+        @inputText(searchForm("filter"))
+
+        <input type="submit" value="Search" class="btn">
+    }
+</div>
+
+
+<div class="container">
+    <h1>You have @notes.size Note(s)</h1>
+
+    <dl class="dl-horizontal">
+
+        @notes.map { note =>
+            <dt><a href="@routes.Application.getNote(note.id)">@note.title</a> </dt>
+
+            <dd>
+                @form(routes.Application.deleteNote(note.id)) {
+                    <input type="submit" value="Delete" class="btn-small">
+                }
+            </dd>
+        </li>
+        }
+    </dl>
+</div>
+
+<div class="container">
+    <h2>Add a new note</h2>
+
+    @form(routes.Application.newNote) {
+
+        @inputText(noteForm("title"))
+
+        @inputText(noteForm("body"))
+
+        <input type="submit" value="Create" class="btn">
+    }
+</div>
+}
