@@ -20,8 +20,9 @@ class MaxStockProfitTest extends FlatSpec with ShouldMatchers {
   }
 
   it should "return old max and changing the min if profit curve is decreasing below min" in {
-    val optimum = Interval(Point(5.0, 100.1), Point(11.0, 1000.1))
-    currMax(Some(Status(optimum, Point(5.0, 100.1))), Point(13.0, 90.1)) should
+    val min: Point = Point(5.0, 100.1)
+    val optimum = Interval(min, Point(11.0, 1000.1))
+    currMax(Some(Status(optimum, min)), Point(13.0, 90.1)) should
         equal(Some(Status(optimum, Point(13.0, 90.1))))
   }
 

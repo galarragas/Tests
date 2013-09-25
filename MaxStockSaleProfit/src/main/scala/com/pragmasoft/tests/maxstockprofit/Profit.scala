@@ -27,6 +27,6 @@ object MaxStockProfit {
 
 
   def maxProfitPoint(graph: List[Point]): Option[Interval] =
-    graph.foldLeft[Option[Status]](None)(currMax(_, _)).flatMap(a => Some(a.optimum))
+    graph.foldLeft[Option[Status]] (None) (currMax(_, _)) flatMap(a => Some(a.optimum))
 
 }
